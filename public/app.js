@@ -2,6 +2,7 @@ import * as Auth from './controller/firebase_auth.js';
 import * as About from './viewpage/about_page.js';
 import * as TicTacToe from './viewpage/tictactoe_page.js'
 import * as Baseball from './viewpage/baseball_page.js'
+import * as Card from './viewpage/cardgame_page.js'
 import {routing} from './controller/route.js'
 
 
@@ -9,7 +10,7 @@ Auth.addEventListeners();
 About.addEventListeners();
 Baseball.addEventListeners();
 TicTacToe.addEventListeners();
-card_page.
+Card.addEventListeners();
 
 window.onload = () => {
     const pathname = window.location.pathname ;
