@@ -11,12 +11,14 @@ export function addEventListeners() {
 
     });
 }
-export function card_page() {
+export async function card_page() {
     if (!currentUser){
         Elements.root.innerHTML = unauthorizedAccess();
         return;
     }
-    
-    let html = 'Card Game Page' ;
-    Elements.root.innerHTML = html ;
-}
+        let html;
+        const response = await fetch('/viewpage/templates/cardgame_page.html', { cache: 'no-store' });
+        html = await response.text();
+        Elements.root.innerHTML = html;
+    }
+
