@@ -13,8 +13,6 @@ export function addEventListeners() {
         history.pushState(null, null, routePath.TICTACTOE);
         tictactoe_page();
     });
-
-
 }
 
 let gameModel;
