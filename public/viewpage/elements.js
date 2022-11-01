@@ -21,3 +21,11 @@ export const menus = {
     about : document.getElementById('menu-about'),
     signOut : document.getElementById('menu-signout'),
 }
+export const cardgamebutton = {
+    cardNewGameButton : document.getElementById('button-new-game-card'),
+    cardPlayGameButton: document.getElementById('button-play-game-card'),
+    cardLoanCoinsButton: document.getElementById('button-loan-coins-card'),
+    cardMinus: document.getElementById('button-minus'),
+    cardAdd: document.getElementById('button-add'),
+    balance: document.getElementById('balance'),
+}

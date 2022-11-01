@@ -2,50 +2,52 @@
     <div class="col">
         <h1>Where is the Firebase?</h1>
         <table>
-            <td style="background-color:rgb(36, 236, 236); padding-right: 150px">
-                Balance:
+            <td style="background-color:rgb(116, 223, 223); padding-right: 150px">
+                <div id = "balance" >Balance: </div>
             </td>
-            <td td style="background-color:rgb(36, 236, 236); padding-right:150px">
-                Current Bets:
+            <td td style="background-color:rgb(116, 223, 223); padding-right:120px">
+                <div id="current_value">Current Bets: 0</div>
             </td>
-            <td td style="background-color:green; padding-right:150px">
-                (Debts:)
+            
+            <td td style="background-color:rgb(13, 197, 13); padding-right:150px">
+                <div id='deb'>(Debts: ) </div>
             </td>
         </table>
         <br>
-
-        SECRET: Firebase card location: 
+        <td>
+             <div id = "randomValue" value = ""></div>
+        </td>
 
         <table>
             <tr>
                 <td style=padding-right:25px>
                     <button id="button-0">
-                        <img id="image-0" src="/images/blank.png" width="200" height="280">
+                        <img id="image-0" src="/images/card.png" width="200" height="280">
                     </button>
-                    <div class="input-group mb-4">
-                        <button class="btn btn-outline-primary" type="button">-</button>
-                        <input type="text" class="form-control" style="height: 50px; width: 100px">
-                        <button class="btn btn-outline-danger" type="button">+</button>
+                    <div class="input-group mb-3">
+                        <button id= "button1-minus" class="btn btn-outline-primary" type="button">-</button>
+                        <input id= "card1-text" type="text" class="form-control" style="height: 50px; width: 100px;text-align: center" value="0">
+                        <button id= "button1-add" class="btn btn-outline-danger" type="button">+</button>
                     </div>
                 </td>
                 <td style=padding-right:25px>
                     <button id="button-1">
                         <img id="image-1" src="/images/card.png" width="200" height="280">
                     </button>
-                    <div class="input-group mb-4">
-                        <button class="btn btn-outline-primary" type="button">-</button>
-                        <input type="text" class="form-control" style="height: 50px; width: 100px">
-                        <button class="btn btn-outline-danger" type="button">+</button>
+                    <div class="input-group mb-3">
+                        <button id= "button2-minus" class="btn btn-outline-primary" type="button">-</button>
+                        <input id= "card2-text" type="text" class="form-control" style="height: 50px; width: 100px; text-align: center" value="0">
+                        <button id= "button2-add" class="btn btn-outline-danger" type="button">+</button>
                     </div>
                 </td>
                 <td style=padding-right:25px>
                     <button id="button-2">
-                        <img id="image-2" src="/images/logo.png" width="200" height="280">
+                        <img id="image-2" src="/images/card.png" width="200" height="280">
                     </button>
-                    <div class="input-group mb-4">
-                        <button class="btn btn-outline-primary" type="button">-</button>
-                        <input type="text" class="form-control" style="height: 50px; width: 100px">
-                        <button class="btn btn-outline-danger" type="button">+</button>
+                    <div class="input-group mb-3">
+                        <button id= "button3-minus" class="btn btn-outline-primary" type="button">-</button>
+                        <input id= "card3-text" type="text" class="form-control" style="height: 50px; width: 100px; text-align: center" value="0">
+                        <button id= "button3-add" class="btn btn-outline-danger" type="button">+</button>
                     </div>
                 </td>
             </tr>
@@ -53,13 +55,13 @@
         <table>
             <tr>
                 <td style=padding-right:250px>
-                    <button class="btn btn-outline-primary">Play</button>
+                    <button id= "button-play-game-card" class="btn btn-outline-primary">Play</button>
                 </td>
                 <td style=padding-right:170px>
-                    <button class="btn btn-outline-danger">New Game</button>
+                    <button id= "button-new-game-card" class="btn btn-outline-danger">New Game</button>
                 </td>
                 <td>
-                    <button class="btn btn-outline-success">Loan 8 Coins</button>
+                    <button id= "button-loan-coins-card" class="btn btn-outline-success">Loan 8 Coins</button>
                 </td>
             </tr>
         </table>
