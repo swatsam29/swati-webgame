@@ -4,11 +4,15 @@ import { unauthorizedAccess } from './unauthorized_access_message.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { info } from './util.js';
 import { marking } from '../model/card_game.js'
+import { addCardGameHistory, getCardGameHistory, getTicTacToeGameHistory } from '../controller/firestore_controller.js';
+import { DEV } from '../model/constants.js';
 
 let totalbalance = 8;
 let current_bet = 0;
 let curr_debt = 0;
 let gamekey = 0;
+let loan = false;
+
 let current_value_element = document.getElementById('current_value');
 export function addEventListeners() {
     Elements.menus.card.addEventListener('click', () => {
@@ -47,45 +51,77 @@ export async function card_page() {
     document.getElementById('button-play-game-card').addEventListener('click', letsplay);
     document.getElementById('button-new-game-card').addEventListener('click', newgame);
     document.getElementById('button-loan-coins-card').addEventListener('click', loanCoins);
+    document.getElementById('button-history').addEventListener('click', gamehistory);
+    let history;
+        try {
+            history = await getCardGameHistory(currentUser.email);
+            totalbalance=history[0].balance;
+            curr_debt=history[0].debts;
+            document.getElementById('balance').innerHTML = "Balance: " + totalbalance;
+            document.getElementById('deb').innerHTML = "(Debts: " + curr_debt + ")";
+
+
+        } catch (e) {
+            //info('Game Over', `Failed to save the game play history: ${e}`);
+            if (DEV) console.log('Game Over: failed to get:', e);
+        }
 
 }
-function letsplay(event) {
-
+async function letsplay(event) {
+    let n = 0;
     if (gamekey == 0) {
-        let n = document.getElementById('card1-text').value;
+        n = document.getElementById('card1-text').value;
         n = n * 3;
         totalbalance = totalbalance + n;
         totalbalance = totalbalance - current_bet;
         document.getElementById('balance').innerHTML = "Balance: " + totalbalance;
-        document.getElementById('image-0').src= '/images/logo.png';
-        document.getElementById('image-1').src= '/images/blank.png';
-        document.getElementById('image-2').src= '/images/blank.png';
+        document.getElementById('image-0').src = '/images/logo.png';
+        document.getElementById('image-1').src = '/images/blank.png';
+        document.getElementById('image-2').src = '/images/blank.png';
     } else if (gamekey == 1) {
-        let n = document.getElementById('card2-text').value;
+        n = document.getElementById('card2-text').value;
         n = n * 3;
         totalbalance = totalbalance + n;
         totalbalance = totalbalance - current_bet;
         document.getElementById('balance').innerHTML = "Balance: " + totalbalance;
-        document.getElementById('image-0').src= '/images/blank.png';
-        document.getElementById('image-1').src= '/images/logo.png';
-        document.getElementById('image-2').src= '/images/blank.png';
+        document.getElementById('image-0').src = '/images/blank.png';
+        document.getElementById('image-1').src = '/images/logo.png';
+        document.getElementById('image-2').src = '/images/blank.png';
     } else if (gamekey == 2) {
-        let n = document.getElementById('card3-text').value;
+        n = document.getElementById('card3-text').value;
         n = n * 3;
         totalbalance = totalbalance + n;
         totalbalance = totalbalance - current_bet;
         document.getElementById('balance').innerHTML = "Balance: " + totalbalance;
-        document.getElementById('image-0').src= '/images/blank.png';
-        document.getElementById('image-1').src= '/images/blank.png';
-        document.getElementById('image-2').src= '/images/logo.png';
-    } 
+        document.getElementById('image-0').src = '/images/blank.png';
+        document.getElementById('image-1').src = '/images/blank.png';
+        document.getElementById('image-2').src = '/images/logo.png';
+    }
+    const gamePlay = {
+        email: currentUser.email,
+        balance: totalbalance,
+        bets: current_bet,
+        debts: curr_debt,
+        loan: loan,
+        timestamp: Date.now(),
+        won: n,
+    };
+    try {
+        await addCardGameHistory(gamePlay);
+
+        //info('Game Over', gameModel.status);
+    } catch (e) {
+        //info('Game Over', `Failed to save the game play history: ${e}`);
+        if (DEV) console.log('Game Over: failed to save:', e);
+    }
+    document.getElementById('transactions').innerHTML = `You won ${n} by betting ${current_bet} coins <br> Game results are stored in Firebase`;
     document.getElementById('button-play-game-card').disabled = true;
     document.getElementById('button-new-game-card').disabled = false;
-    current_bet=0;
-    
+    current_bet = 0;
+
 }
 
-function newgame(event){
+function newgame(event) {
     card_page();
 }
 
@@ -193,19 +229,76 @@ function balance() {
 
 
 }
-function loanCoins(event) {
+async function loanCoins(event) {
 
     if (totalbalance == 0) {
         info("Loan Complete", 'You borrowed 8 Coins');
-        totalbalance= totalbalance+8;
+        totalbalance = totalbalance + 8;
         document.getElementById('balance').innerHTML = "Balance:" + totalbalance;
-        curr_debt= curr_debt+8;
+        curr_debt = curr_debt + 8;
         document.getElementById('deb').innerHTML = "(Debts: " + curr_debt + ")";
+        loan = true;
+        const gamePlay = {
+            email: currentUser.email,
+            balance: totalbalance,
+            debts: curr_debt,
+            loan: loan,
+            timestamp: Date.now(),
+        };
+        try {
+            await addCardGameHistory(gamePlay);
+    
+            //info('Game Over', gameModel.status);
+        } catch (e) {
+            //info('Game Over', `Failed to save the game play history: ${e}`);
+            if (DEV) console.log('Game Over: failed to save:', e);
+        }
+        loan = false;
     } else {
         info("Not available", 'Loan available when your balance is 0');
     }
 }
 
+async function gamehistory(event){
+        let history;
+        try {
+            history = await getCardGameHistory(currentUser.email);
+            let html = `
+                <table class="table table-success table-striped">
+                <br>
+            `;
+            for (let i = 0; i < history.length; i++) {
+                if(history[i].loan==false){
+                    html += `
+                    <tr>
+                    <td>
+                    (${new Date(history[i].timestamp).toLocaleString()}) <br>
+                    Balance = ${history[i].balance} Debt = ${history[i].debts} : BET ${history[i].bets}, WON ${history[i].won} coins
+                    </td>
+                    </tr>
+                    
+                    `;
+                }else{
+                    html += `
+                    <tr>
+                    <td>
+                    (${new Date(history[i].timestamp).toLocaleString()}) <br>
+                    Balance = ${history[i].balance} Debt = ${history[i].debts} : Borrowed 8 coins
+                    </td>
+                    </tr>
+                    
+                    `;
+                }
+                
+            }
+            html += '</table>';
+            document.getElementById('transactions').innerHTML = html;
+    
+        } catch (e) {
+           if (DEV) console.log('ERROR; history button', e);
+           info('Failed to get game history', JSON.stringify(e));
+        }
+    }
 
 
 
