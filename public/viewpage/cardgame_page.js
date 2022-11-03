@@ -264,7 +264,7 @@ async function gamehistory(event){
         try {
             history = await getCardGameHistory(currentUser.email);
             let html = `
-                <table class="table table-success table-striped">
+                <table class="table table-secondary table-striped">
                 <br>
             `;
             for (let i = 0; i < history.length; i++) {
