@@ -12,8 +12,8 @@ let current_bet = 0;
 let curr_debt = 0;
 let gamekey = 0;
 let loan = false;
-
 let current_value_element = document.getElementById('current_value');
+
 export function addEventListeners() {
     Elements.menus.card.addEventListener('click', () => {
         history.pushState(null, null, routePath.CARD);
@@ -36,7 +36,6 @@ export async function card_page() {
     Elements.root.innerHTML = html;
     gamekey = valuegenrator();
     balance();
-    //newgame();
     document.getElementById('card1-text').disabled = true;
     document.getElementById('card2-text').disabled = true;
     document.getElementById('card3-text').disabled = true;
@@ -53,18 +52,18 @@ export async function card_page() {
     document.getElementById('button-loan-coins-card').addEventListener('click', loanCoins);
     document.getElementById('button-history').addEventListener('click', gamehistory);
     let history;
-        try {
-            history = await getCardGameHistory(currentUser.email);
-            totalbalance=history[0].balance;
-            curr_debt=history[0].debts;
-            document.getElementById('balance').innerHTML = "Balance: " + totalbalance;
-            document.getElementById('deb').innerHTML = "(Debts: " + curr_debt + ")";
+    try {
+        history = await getCardGameHistory(currentUser.email);
+        totalbalance = history[0].balance;
+        curr_debt = history[0].debts;
+        document.getElementById('balance').innerHTML = "Balance: " + totalbalance;
+        document.getElementById('deb').innerHTML = "(Debts: " + curr_debt + ")";
 
 
-        } catch (e) {
-            //info('Game Over', `Failed to save the game play history: ${e}`);
-            if (DEV) console.log('Game Over: failed to get:', e);
-        }
+    } catch (e) {
+        //info('Game Over', `Failed to save the game play history: ${e}`);
+        if (DEV) console.log('Game Over: failed to get:', e);
+    }
 
 }
 async function letsplay(event) {
@@ -143,8 +142,6 @@ function clickadd1(event) {
 
     }
     endisplay();
-    // loanCoins();
-    //newgame();
 }
 function clickminus1(event) {
     let x = parseInt(document.getElementById('card1-text').value);
@@ -158,8 +155,6 @@ function clickminus1(event) {
 
     }
     endisplay();
-    // loanCoins();
-    //newgame();
 }
 function clickadd2(event) {
     if (current_bet < totalbalance) {
@@ -172,8 +167,6 @@ function clickadd2(event) {
         document.getElementById('current_value').innerHTML = "Current Bets: " + current_bet;
     }
     endisplay();
-    // loanCoins();
-    //newgame();
 }
 function clickminus2(event) {
     let x = parseInt(document.getElementById('card2-text').value);
@@ -186,7 +179,6 @@ function clickminus2(event) {
         document.getElementById('current_value').innerHTML = "Current Bets: " + current_bet;
     }
     endisplay();
-    //newgame();
 }
 function clickadd3(event) {
     if (current_bet < totalbalance) {
@@ -198,7 +190,6 @@ function clickadd3(event) {
         document.getElementById('current_value').innerHTML = "Current Bets: " + current_bet;
     }
     endisplay();
-    //newgame();
 }
 function clickminus3(event) {
     let x = parseInt(document.getElementById('card3-text').value);
@@ -210,7 +201,6 @@ function clickminus3(event) {
         document.getElementById('current_value').innerHTML = "Current Bets: " + current_bet;
     }
     endisplay();
-    //newgame();
 }
 let num = [];
 
@@ -247,7 +237,7 @@ async function loanCoins(event) {
         };
         try {
             await addCardGameHistory(gamePlay);
-    
+
             //info('Game Over', gameModel.status);
         } catch (e) {
             //info('Game Over', `Failed to save the game play history: ${e}`);
@@ -259,17 +249,17 @@ async function loanCoins(event) {
     }
 }
 
-async function gamehistory(event){
-        let history;
-        try {
-            history = await getCardGameHistory(currentUser.email);
-            let html = `
+async function gamehistory(event) {
+    let history;
+    try {
+        history = await getCardGameHistory(currentUser.email);
+        let html = `
                 <table class="table table-secondary table-striped">
                 <br>
             `;
-            for (let i = 0; i < history.length; i++) {
-                if(history[i].loan==false){
-                    html += `
+        for (let i = 0; i < history.length; i++) {
+            if (history[i].loan == false) {
+                html += `
                     <tr>
                     <td>
                     (${new Date(history[i].timestamp).toLocaleString()}) <br>
@@ -278,8 +268,8 @@ async function gamehistory(event){
                     </tr>
                     
                     `;
-                }else{
-                    html += `
+            } else {
+                html += `
                     <tr>
                     <td>
                     (${new Date(history[i].timestamp).toLocaleString()}) <br>
@@ -288,17 +278,17 @@ async function gamehistory(event){
                     </tr>
                     
                     `;
-                }
-                
             }
-            html += '</table>';
-            document.getElementById('transactions').innerHTML = html;
-    
-        } catch (e) {
-           if (DEV) console.log('ERROR; history button', e);
-           info('Failed to get game history', JSON.stringify(e));
+
         }
+        html += '</table>';
+        document.getElementById('transactions').innerHTML = html;
+
+    } catch (e) {
+        if (DEV) console.log('ERROR; history button', e);
+        info('Failed to get game history', JSON.stringify(e));
     }
+}
 
 
 
